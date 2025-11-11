@@ -1,0 +1,58 @@
+version: '3.8'
+
+services:
+  php:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: yii2_app
+    volumes:
+      - .:/app
+    depends_on:
+      - db
+      - rabbitmq
+    networks:
+      - app-network
+    environment:
+      - DB_HOST=db
+      - DB_PORT=5432
+      - DB_NAME=yii2_messages
+      - DB_USER=yii2user
+      - DB_PASSWORD=yii2pass
+      - RABBITMQ_HOST=rabbitmq
+      - RABBITMQ_PORT=5672
+      - RABBITMQ_USER=guest
+      - RABBITMQ_PASSWORD=guest
+
+  db:
+    image: postgres:14-alpine
+    container_name: postgres_db
+    environment:
+      POSTGRES_DB: yii2_messages
+      POSTGRES_USER: yii2user
+      POSTGRES_PASSWORD: yii2pass
+    ports:
+      - "5432:5432"
+    volumes:
+      - db_data:/var/lib/postgresql/data
+    networks:
+      - app-network
+
+  rabbitmq:
+    image: rabbitmq:3-management-alpine
+    container_name: rabbitmq
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+    environment:
+      RABBITMQ_DEFAULT_USER: guest
+      RABBITMQ_DEFAULT_PASS: guest
+    networks:
+      - app-network
+
+volumes:
+  db_data:
+
+networks:
+  app-network:
+    driver: bridge
