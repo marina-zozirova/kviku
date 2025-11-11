@@ -131,7 +131,7 @@ class Message extends ActiveRecord
         ]);
 
         if (!$message->validate()) {
-            $errorText = $message->getFormattedErrors();
+            $errorText = ErrorHelper::formatModelErrors($message);
             Yii::error("Ошибка валидации: {$errorText}", __METHOD__);
             throw new \Exception("Ошибка валидации: {$errorText}");
         }

@@ -1,6 +1,9 @@
 #!/bin/bash
 set -e
 
+echo "установка зависимостей"
+composer install --no-interaction --prefer-dist --optimize-autoloader
+
 echo "подключение к бд"
 until php yii migrate --interactive=0 2>/dev/null; do
   echo "бд недоступна"
