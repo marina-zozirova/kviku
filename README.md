@@ -2,7 +2,7 @@
 
 
 ```bash
-git clone git clone https://github.com/marina-zozirova/kviku.git
+git clone https://github.com/marina-zozirova/kviku.git
 cd kviku
 docker-compose up -d --build
 ```
