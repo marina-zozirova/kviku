@@ -101,8 +101,12 @@ class RabbitMQComponent extends Component
 
             Yii::info("Ожидание сообщений в очереди: {$this->queueName}", __METHOD__);
 
-            while ($this->channel->is_consuming()) {
-                $this->channel->wait();
+            while ($this->channel->is_open()) {
+                try {
+                    $this->channel->wait(null, false, 30);
+                } catch (\PhpAmqpLib\Exception\AMQPTimeoutException $e) {
+                    continue;
+                }
             }
         } catch (\Exception $e) {
             Yii::error("Ошибка получения сообщений: " . $e->getMessage(), __METHOD__);
