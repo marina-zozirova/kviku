@@ -26,6 +26,14 @@ $config = [
             ],
         ],
         'db' => $db,
+        'rabbitmq' => [
+            'class' => 'app\components\RabbitMQComponent',
+            'host' => $_ENV['RABBITMQ_HOST'] ?? getenv('RABBITMQ_HOST') ?: 'rabbitmq',
+            'port' => $_ENV['RABBITMQ_PORT'] ?? getenv('RABBITMQ_PORT') ?: 5672,
+            'user' => $_ENV['RABBITMQ_USER'] ?? getenv('RABBITMQ_USER') ?: 'guest',
+            'password' => $_ENV['RABBITMQ_PASSWORD'] ?? getenv('RABBITMQ_PASSWORD') ?: 'guest',
+            'queueName' => 'messages_queue',
+        ],
     ],
     'params' => $params,
     /*
