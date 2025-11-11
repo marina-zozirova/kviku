@@ -16,14 +16,12 @@ COPY --from=composer:2 /usr/bin/composer /usr/bin/composer
 # Set working directory
 WORKDIR /app
 
-# Copy composer files first
-COPY composer.json composer.lock* ./
-
-# Update dependencies for PHP 7.4
-RUN composer update --no-interaction --prefer-dist --optimize-autoloader --ignore-platform-reqs
-
-# Copy rest of application
+# Copy application
 COPY . /app
 
-# Keep container running
+# Copy entrypoint script
+COPY docker-entrypoint.sh /usr/local/bin/
+RUN chmod +x /usr/local/bin/docker-entrypoint.sh
+
+ENTRYPOINT ["docker-entrypoint.sh"]
 CMD ["tail", "-f", "/dev/null"]
